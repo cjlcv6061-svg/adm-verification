@@ -1,0 +1,509 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{cite}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\title{Holographic Complexity in Cosmology:\\Positive Results, No-Go Theorems, and the\\Memory Integral Obstruction}
+\author{John Shun Leong Cheng\,\textsuperscript{[0009-0008-6812-0339]}\\[4pt]
+\textit{Independent Researcher}}
+\date{Revised --- April 2026\\[4pt]
+\small First version: March 2026, Zenodo \href{https://doi.org/10.5281/zenodo.19242134}{10.5281/zenodo.19242134}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We systematically investigate whether the growth of holographic computational complexity can drive cosmic acceleration through modifications of the Bekenstein--Hawking entropy-area law within the Jacobson thermodynamic programme.
+We establish four positive results:
+(i) the complexity filling fraction takes the parameter-free form $f_C \approx 0.057$ for $\Lambda$CDM (exact numerical integral of the Lloyd bound over cosmic history);
+(ii) the Harlow--Hayden computational complexity barrier and Chaitin's halting probability~$\Omega$ are separated by the Church--Turing limit: both share high Kolmogorov complexity and high logical depth (Bennett, 1988), but HH lies in Class~$\mathbf{C}$ (computable inversion, exponentially slow) while $\Omega$ lies in Class~$\mathbf{U}$ (no computable inversion exists)---a computability-theoretic separation refining the structural correspondence reported in the first version of this paper;
+(iii) the Almheiri--Dong--Harlow quantum error correction (QEC) framework suggests a novel screening mechanism for local gravity variations (presented as a heuristic proposal);
+and (iv) the de Sitter Exclusion Theorem links the late-time fate of the universe to the computational complexity class of quantum gravity.
+We then prove three no-go theorems.
+First, for any monotonic entropy-area modification, positive dark energy and a weakening gravitational constant are mutually exclusive (Theorem~1).
+Second, the corrected entropy law produces a memory integral that forces cosmic recollapse (Theorem~2).
+Third, if the universe is modelled as a Maximum Distance Separable holographic QEC code saturating the Lloyd bound, the resulting equation of state $w = -1 + 1/(3\pi^2) \approx -0.966$ worsens the Hubble tension to $6.3\sigma$ and is incompatible with DESI~DR2 at $>3\sigma$; moreover, time-dependent entropy production $\dot\Sigma(t)$ is suppressed by $\sim 17$ orders of magnitude relative to the static term, rendering the dynamic correction physically empty (Theorem~3).
+These results close the programme of complexity-driven dark energy within the Jacobson framework and its QEC extension.
+\end{abstract}
+
+%% ====================================================================
+\section{Introduction}
+%% ====================================================================
+
+The cosmological constant problem---the discrepancy of roughly 120 orders of magnitude between quantum field theoretic predictions of vacuum energy and the observed dark energy density~\cite{Weinberg1989}---remains among the deepest unsolved puzzles in theoretical physics.
+Recent DESI~DR2 observations~\cite{DESI2025} showing a $2.8$--$4.2\sigma$ preference for time-varying dark energy have intensified the search for fundamental explanations of cosmic acceleration.
+
+Simultaneously, developments in quantum gravity have revealed deep connections between spacetime geometry, quantum information, and computational complexity.
+Jacobson~\cite{Jacobson1995} showed that Einstein's equations emerge from $\delta Q = T\,dS$ applied to local Rindler horizons.
+Padmanabhan~\cite{Padmanabhan2012} demonstrated that the Friedmann equations follow from a holographic law relating bulk and surface degrees of freedom.
+Susskind and collaborators~\cite{Susskind2016,Brown2016} proposed that the growth of Einstein--Rosen bridge volume in AdS black holes is dual to the growth of quantum computational complexity, formalised in the Complexity=Volume~(CV) and Complexity=Action~(CA) conjectures.
+
+Several existing programmes modify the Bekenstein--Hawking entropy to produce modified Friedmann equations---Barrow entropy~\cite{Barrow2020}, Tsallis entropy~\cite{Tsallis2013}, and Kaniadakis entropy~\cite{Kaniadakis2002} all use constant deformation parameters.
+A complexity-based modification would make the deformation parameter dynamical, determined by the expansion history itself.
+
+In this paper, we pursue this programme systematically and discover both positive results and fundamental obstructions.
+Section~2 presents the axiomatic framework.
+Section~3 derives the complexity filling fraction.
+Sections~4--5 prove the entropy-area no-go theorems.
+Section~6 presents the refined Harlow--Hayden / Chaitin~$\Omega$ computability-theoretic separation with the Class~$\mathbf{C}$/Class~$\mathbf{U}$ partition.
+Section~7 introduces the QEC screening proposal.
+Section~8 proves the de Sitter Exclusion Theorem.
+Section~9 presents a new no-go theorem from QEC cosmology.
+Section~10 discusses implications and open directions.
+
+%% ====================================================================
+\section{Axiomatic Framework}
+%% ====================================================================
+
+Our framework rests on six axioms, each grounded in established results.
+
+\textbf{Axiom~1 (Holographic Storage).}
+The maximum information capacity of a region bounded by area~$A$ is $S_{\max} = A/(4\ell_P^2)$.
+This is the Bekenstein--Hawking entropy bound~\cite{Bekenstein1973,Hawking1975}.
+
+\textbf{Axiom~2 (Information Monotonicity).}
+The cumulative structural entropy $\Sigma(t)$ satisfies $d\Sigma/dt \ge 0$.
+This is the generalised second law of thermodynamics~\cite{Bekenstein1974}.
+
+\textbf{Axiom~3 (Holographic Constraint).}
+$\Sigma(t) \le S_{\max}(t)$.
+The actual information content never exceeds the holographic capacity.
+
+\textbf{Axiom~4 (Emergence Law).}
+The rate of spatial emergence is governed by $dV/dt = \ell_P^2 c\,(N_{\rm sur} - N_{\rm bulk})$.
+This is Padmanabhan's law of emergence~\cite{Padmanabhan2012}, mathematically equivalent to the Friedmann equations.
+
+\textbf{Axiom~5 (Uncomputability).}\footnote{We use ``axiom'' in the mathematical sense of ``starting assumption of the framework,'' not in the epistemological sense of ``self-evident truth.''
+Axioms~5 and~6 are physical hypotheses whose status differs from the established results in Axioms~1--4; this distinction is tracked throughout via conditional statements in all theorems.}
+There exists a family of physical systems $\{H_n\}$ whose macroscopic properties are algorithmically equivalent to determining bits of Chaitin's~$\Omega$.
+This is supported by the spectral gap undecidability result of Cubitt, Perez-Garcia, and Wolf~\cite{Cubitt2015}.
+While the physical realisation of such systems in nature remains an open question, recent advances in programmable quantum simulators are beginning to probe the boundaries of computational complexity in synthetic quantum matter.
+
+\textbf{Axiom~6 (Computational Irreducibility).}
+There exist physical processes whose outcomes cannot be predicted by any algorithm shorter than the process itself.
+This is Wolfram's principle~\cite{Wolfram2002}, supported by rigorous results in holographic complexity growth~\cite{Bouland2018}.
+
+Axioms~1--4 are mathematically equivalent to general relativistic cosmology.
+Axiom~5 is supported by a rigorous theorem but requires a physical realisation assumption.
+Axiom~6 is a well-motivated conjecture.
+The formal results in this paper (Theorems~1--3) depend only on Axioms~1--5; Axiom~6 provides conceptual support for the Harlow--Hayden correspondence (Section~6) but is not invoked in any proof.
+
+
+%% ====================================================================
+\section{The Complexity Filling Fraction}
+%% ====================================================================
+
+\subsection{Definition and Derivation}
+
+We define the complexity filling fraction as the ratio of accumulated computational complexity to holographic capacity:
+\begin{equation}
+f_C = \frac{C_A(t_0)}{S_H}\,,
+\end{equation}
+where $C_A$ is the complexity accumulated according to the CA conjecture and $S_H = \pi c^2/(H_0^2 \ell_P^2)$ is the holographic entropy of the Hubble horizon.
+
+The CA conjecture bounds complexity growth by the Lloyd limit~\cite{Lloyd2000}: $dC_A/dt \le 2E/(\pi\hbar)$.
+The Misner--Sharp energy at the apparent horizon $r_H = c/H$ is $E(t) = c^5/(2G_N H(t))$, which varies with cosmic time.
+Assuming saturation (which provides an upper bound on complexity growth):
+\begin{equation}\label{eq:CA}
+C_A(t_0) = \int_0^{t_0} \frac{c^5}{\pi G_N \hbar\, H(t')}\,dt'\,.
+\end{equation}
+Taking the ratio with $S_H$ and using $\ell_P^2 = \hbar G_N/c^3$:
+\begin{equation}\label{eq:fc}
+\boxed{f_C = \frac{H_0^2}{\pi^2}\int_0^{t_0}\frac{dt'}{H(t')} = \frac{1}{\pi^2}\int_0^\infty \frac{dz}{(1+z)\,\bigl[\Omega_m(1+z)^3+\Omega_\Lambda\bigr]}}
+\end{equation}
+where the second equality assumes spatial flatness ($\Omega_k = 0$), as in the standard $\Lambda$CDM concordance model, and uses the variable change $dt = -dz/[(1+z)\,H(z)]$ with $H(z) = H_0\sqrt{\Omega_m(1+z)^3 + \Omega_\Lambda}$.
+For a power-law cosmology $a\propto t^n$ (where $H = n/t$), the integral evaluates to $f_C = n/(2\pi^2)$, which is constant in time and depends only on the expansion index~$n$.
+For the Einstein--de~Sitter case ($n=2/3$): $f_C = 1/(3\pi^2) \approx 0.034$.
+For $\Lambda$CDM ($\Omega_m = 0.315$), numerical integration gives:
+\begin{equation}
+f_C^{\Lambda\mathrm{CDM}} \approx 0.057\,.
+\end{equation}
+An algebraic shortcut treating $H$ as constant at~$H_0$ gives $f_C \approx t_0 H_0/\pi^2 \approx 0.10$; this overestimates the exact integral by a factor of~$1.7$ for $\Lambda$CDM because $H(t) > H_0$ throughout the matter- and radiation-dominated eras.
+While the algebraic shortcut captures the correct order of magnitude, the exact integral~\eqref{eq:fc} should be used for quantitative comparisons.
+
+\subsection{Properties}
+
+\begin{itemize}[nosep]
+\item \textbf{Parameter-free}: $f_C$ involves no free parameters beyond the CA conjecture.
+\item \textbf{Self-consistent in EdS}: For any power-law cosmology $a\propto t^n$, $f_C = n/(2\pi^2)$ is constant in time, so $\dot f_C = 0$ exactly.
+Any effective gravitational coupling $G_{\rm eff}(f)$ is therefore strictly time-independent in matter or radiation domination.
+\item \textbf{Dynamic in $\Lambda$CDM}: During epoch transitions (matter $\to$ $\Lambda$ domination), $\dot f_C \neq 0$ and $G_{\rm eff}$ evolves.
+\end{itemize}
+
+\subsection{The Holographic Capacity Dichotomy}
+
+The filling fraction reveals a striking asymmetry in the universe's information budget.
+The \emph{thermodynamic} filling fraction---the ratio of actual entropy to holographic capacity---is $f_S = S_{\rm actual}/S_H \sim 10^{-18}$, dominated by supermassive black hole entropy $S_{\rm actual}\sim 10^{104}\,k_B$ against the Hubble horizon capacity $S_H \sim 10^{122}\,k_B$~\cite{EganLineweaver2010}.
+In contrast, the \emph{computational} filling fraction is $f_C \approx 0.057$---sixteen orders of magnitude larger.
+
+\begin{remark}[Holographic Capacity Dichotomy]
+The universe has utilised $\sim 10^{-18}$ of its thermodynamic capacity but $\sim 6\%$ of its computational complexity capacity:
+\begin{equation}
+\frac{f_C}{f_S} \sim 10^{16}\,.
+\end{equation}
+Entropy counts microstates; complexity counts operations.
+The Lloyd bound grows linearly in time ($C \sim Et/\hbar$, requiring only continuous energy throughput), while entropy production is dominated by rare, violent events (black hole mergers, AGN accretion).
+The universe is thermodynamically young but computationally mature.
+\end{remark}
+
+
+%% ====================================================================
+\section{No-Go Theorem~I: The Sign Problem}
+%% ====================================================================
+
+\subsection{Setup}
+
+Following Jacobson~\cite{Jacobson1995}, we modify the entropy-area relation to $S_{\rm eff} = S_{\rm BH}\times g(f)$.
+The Jacobson derivation yields:
+\begin{equation}
+H^2 = \frac{8\pi G_N}{3\,g(f)}\,\rho_m\,.
+\end{equation}
+The effective dark energy density is $\rho_{\rm DE} = \rho_m[1/g(f) - 1]$.
+
+\begin{theorem}[Sign Problem]\label{thm:sign}
+Let $S_{\rm eff} = S_{\rm BH}\times g(f)$ with $g$ monotonic and $f(t)$ monotonically increasing.
+Then $\Omega_{\rm DE} > 0$ and $\dot G_{\rm eff} < 0$ are mutually exclusive.
+\end{theorem}
+
+\begin{proof}
+If $g$ is increasing: $G_{\rm eff} = G_N/g$ decreases ($\dot G_{\rm eff}<0$), but $g>1$ implies $\rho_{\rm DE} = \rho_m[1/g-1] < 0$.
+If $g$ is decreasing: $\rho_{\rm DE}>0$ but $\dot G_{\rm eff}>0$.
+In neither case can both conditions hold simultaneously.
+\end{proof}
+
+
+%% ====================================================================
+\section{No-Go Theorem~II: The Memory Integral Catastrophe}
+%% ====================================================================
+
+\subsection{The Corrected Entropy Law}
+
+Motivated by the sign problem, we consider the general entropy-area modification $S_{\rm eff} = S_{\rm BH}\,g(f)$ with $g(0) = 1$.
+Applying the Clausius relation on the apparent horizon~\cite{CaiKim2005,AkbarCai2006} yields the modified Raychaudhuri equation:
+\begin{equation}
+4\pi G_N(\rho+p) = -\dot H\,g(f) + \tfrac{1}{2}\,g'(f)\,\dot f\,H\,.
+\end{equation}
+Multiplying by $-2H$, using the continuity equation $\dot\rho_m = -3H\rho_m$, and integrating from $t=0$ with $f(0)=0$, $g(0)=1$:
+\begin{equation}\label{eq:memory}
+H^2\,g(f) = \frac{8\pi G_N}{3}\,\rho_m + 2\int_0^t g'(f)\,\dot f\,H^2\,dt'\,.
+\end{equation}
+The formal lower limit $t = 0$ corresponds to the Big Bang singularity where $H\to\infty$; in practice, the integral is finite because $\dot f \propto \eta(z)$ vanishes at early times (the driving function has compact support), and numerical implementations use a high-redshift boundary condition (e.g.\ $z_{\rm init} = 20$) where $f \approx 0$ and the standard Friedmann equation is recovered.
+For the specific case $g(f) = 1 - \lambda f$ (where $g' = -\lambda$), this reduces to $(1-\lambda f)H^2 + 2\lambda I(t) = \tfrac{8\pi G_N}{3}\rho_m$ with the memory integral $I(t) = \int_0^t \dot f\,H^2\,dt'$, recovering the form given in v1 of this paper.
+
+\begin{theorem}[Memory Integral Catastrophe --- Universal Form]\label{thm:memory}
+For \emph{any} entropy-area modification $S_{\rm eff} = S_{\rm BH}\,g(f)$ with $g(0) = 1$, $g(f) < 1$ (required for positive dark energy by Theorem~\ref{thm:sign}), and $\dot f > 0$ (Axiom~2), the modified Friedmann equation~\eqref{eq:memory} admits no expanding solution that reaches the present epoch.
+\end{theorem}
+
+\begin{proof}
+Since $g(f) < 1$ for $f > 0$ and $g(0) = 1$, the function~$g$ must be decreasing: $g'(f) < 0$ for some interval.
+The integrand in~\eqref{eq:memory} satisfies $g'(f)\,\dot f\,H^2 < 0$ (since $g' < 0$, $\dot f > 0$, $H^2 > 0$).
+Therefore the integral is negative and monotonically decreasing in magnitude.
+The modified Friedmann equation becomes $H^2\,g(f) = \tfrac{8\pi G_N}{3}\rho_m - |J(t)|$, where $J(t) = -2\int_0^t g'\dot f H^2\,dt' > 0$ is strictly positive and growing.
+Since $\rho_m \propto a^{-3}$ decreases while $|J(t)|$ grows, the right-hand side vanishes at finite time, forcing $H^2 = 0$ (recollapse).
+More precisely, if $\dot f$ has compact support or decays sufficiently rapidly at late times (as in any model where the driving function~$\eta(z)$ is localised around a finite redshift range), $|J(t)|$ asymptotes to a strictly positive constant while $\rho_m \to 0$ as $a\to\infty$; the zero-crossing is therefore mathematically guaranteed.
+Numerical integration confirms this for the linear case at $z \approx 1.75$ (Appendix~A).
+\end{proof}
+
+This result is universal: it applies to \emph{any} monotonically decreasing function $g(f)$, not just the linear ansatz $g = 1 - \lambda f$.
+It places all time-dependent entropy-area modifications in a fundamentally new class (``cybernetic entropy'') distinct from static modifications (Barrow, Tsallis, Kaniadakis), which produce algebraic Friedmann equations.
+
+
+%% ====================================================================
+\section{The Harlow--Hayden / Chaitin $\Omega$ Computability-Theoretic Separation}
+\label{sec:hierarchy}
+%% ====================================================================
+
+The Harlow--Hayden result~\cite{HarlowHayden2013} establishes that decoding Hawking radiation requires quantum circuit depth exponential in the black hole entropy: $t_{\rm decode} \sim \exp(S_{\rm BH})$.
+Chaitin's halting probability $\Omega$~\cite{Chaitin1975} encodes the halting behaviour of all Turing machines of length~$\le n$ in its first~$n$ bits, with the property that no Turing machine can compute these bits.
+An earlier version of this paper described these two results as ``structurally isomorphic.''
+We now show that this description is imprecise in a way that matters for methodology.
+
+\subsection{The Bennett Correction}
+
+A preliminary clarification is essential.
+Bennett~\cite{Bennett1988} proved that Martin-L\"of random strings have \emph{zero} logical depth: a typical string~$x$ with $K(x)\approx |x|$ (maximally incompressible) can be produced from a random input by the identity programme in $O(n)$ steps.
+\textbf{Randomness alone does not imply computational difficulty.}
+Both HH and~$\Omega$ involve high Kolmogorov complexity \emph{combined with} high logical depth---but they differ crucially: HH depth is finite ($\exp(n)$ steps suffice), while $\Omega$ depth is unbounded (no finite computation suffices).
+
+\subsection{The Computability Boundary}
+
+The correct framework distinguishes two kinds of impossibility:
+\emph{resource impossibility} (HH: an inversion algorithm exists but requires super-polynomial resources) and \emph{logical impossibility} ($\Omega$: no inversion algorithm exists at all).
+
+We formalise this via the following partition.
+An \emph{encoding family} is a sequence $F = (F_n)_{n\ge 1}$ where $F_n : \{0,1\}^n \to \{0,1\}^{m(n)}$.
+
+\begin{definition}[Class $\mathbf{C}$ / Class $\mathbf{U}$]\label{def:CU}
+An encoding family~$F$ is \emph{decompressible} ($F \in \mathbf{C}$) if there exists a computable function~$D$ such that $D(F_n(x)) = x$ for all~$n$ and~$x$.
+$F$ is \emph{undecompressible} ($F \in \mathbf{U}$) if no such computable~$D$ exists.
+\end{definition}
+
+This partition is non-trivial: both classes are non-empty, and the boundary is established by the same diagonal argument that separates countable from uncountable sets (Cantor) and decidable from undecidable problems (Turing).
+
+\medskip\noindent\textbf{HH $\in$ Class $\mathbf{C}$.}
+The scrambling unitary $U_{\rm scr}^{(n)}$ is a computably specified quantum circuit.
+Its inverse circuit---the reverse gate sequence with each gate replaced by its Hermitian conjugate---is also computably specified~\cite{ChengPaperC2026}.
+Therefore a computable decoder exists, even though its resource cost is $\exp(n)$.
+
+\medskip\noindent\textbf{$\Omega \in$ Class $\mathbf{U}$.}
+If a computable~$D$ inverted any faithful encoding of~$\Omega$, then $\Omega_n$ would be computable as a function of~$n$.
+But if $\Omega$ is computable, one can decide the halting problem by running all programmes of length~$\le n$ in parallel until their cumulative probability reaches~$\Omega_n$---contradicting Turing's undecidability theorem.
+Therefore no computable~$D$ exists.
+
+\medskip
+The structural correspondence noted in v1 of this paper is therefore better described as a \emph{computability-theoretic separation}: HH and~$\Omega$ both occupy the region of high Kolmogorov complexity and high logical depth, but are separated by the Church--Turing limit.
+HH lies on the computable side; $\Omega$ lies beyond it.
+
+\subsection{The Cubitt Ceiling}
+
+A natural question arising from Section~8 below is whether the spectral gap undecidability of Cubitt, Perez-Garcia, and Wolf~\cite{Cubitt2015} could ``upgrade'' the HH barrier from Class~$\mathbf{C}$ to Class~$\mathbf{U}$---making it unconditionally uncomputable.
+The answer is no.
+Cubitt's undecidability is a \emph{decision problem} about a family of Hamiltonians in the thermodynamic limit ($L\to\infty$); HH inversion is an \emph{inversion problem} for a specific unitary at finite~$n$.
+These are categorically different computational tasks.
+Moreover, any physical black hole has finite lattice size $L = O(\sqrt{S_{\rm BH}})$, for which the spectral gap is computable by standard linear algebra.
+Cubitt's undecidability does not apply.
+The detailed analysis is carried out in the companion paper~\cite{ChengPaperC2026}.
+
+\subsection{Physical Realizability Ceiling}
+
+\begin{remark}[Physical Realizability Ceiling]
+Under the Church--Turing--Deutsch thesis~\cite{Deutsch1985}, every physically realisable encoding family lies in Class~$\mathbf{C}$.
+Physical processes are simulable by quantum Turing machines, hence computable; their inverses are also computable (by reversing the circuit).
+Class~$\mathbf{U}$ encodings---those requiring the Busy Beaver function $\mathrm{BB}(n)$ for inversion---are inaccessible to any physical system.
+\end{remark}
+
+CTD is a thesis, not a proven theorem; hypercomputation proposals dispute it.
+The remark is conditional on CTD throughout.
+
+\subsection{Methodological Consequence}
+
+This separation clarifies which mathematical tools are appropriate for each class of barrier.
+HH-type barriers---resource limitations within the computable---are studied with quantum circuit complexity, one-way functions, and BQP/QMA separations.
+$\Omega$-type barriers---logical limitations at the edge of computability---require computability theory, the arithmetical hierarchy, and G\"odel incompleteness.
+Using the wrong tools for either class obstructs progress; the separation identified here provides the correct framework for future work connecting computational complexity to spacetime geometry.
+
+
+%% ====================================================================
+\section{Quantum Error Correction and Gravitational Screening}
+%% ====================================================================
+
+\subsection{A Heuristic Proposal}
+
+Almheiri, Dong, and Harlow~\cite{ADH2015} showed that AdS/CFT has the structure of a quantum error-correcting code.
+We propose a heuristic screening argument: if the effective gravitational coupling $G_{\rm eff}$ arises from a bulk scalar field~$\Psi$ subject to the QEC subsystem structure, the local code rate is exponentially suppressed:
+\begin{equation}
+\frac{k_{\rm local}}{n} \sim \frac{k_{\rm global}}{n}\times \exp(-S_{\rm local})\,,
+\end{equation}
+where $S_{\rm local} = \pi(r/\ell_P)^2 \approx 10^{96}$ for solar-system scales.
+This yields $|\dot G/G|_{\rm local} \equiv 0$ to all conceivable experimental precision.
+The exponential suppression $\exp(-S_{\rm local})$ arises from the inverse dimension of the local Hilbert space: reconstructing a global logical operator from a boundary subregion of entropy~$S_{\rm local}$ requires distinguishing among $\exp(S_{\rm local})$ microstates, and the Knill--Laflamme error bound scales with this inverse dimension.
+If realised, this mechanism would predict \emph{exactly} zero deviation in all local weak-field gravity experiments, including parameterised post-Newtonian parameters: the suppression factor $\exp(-10^{96})$ admits no theoretical floor above zero.
+
+We emphasise that this argument is motivational, not rigorous.
+A complete derivation would require embedding the scalar-tensor coupling in a concrete holographic model and demonstrating that $G_{\rm eff}$ variations are captured by a logical operator rather than a background parameter.
+Three specific open problems must be resolved: (i)~constructing a holographic code in a cosmological (non-AdS) setting; (ii)~identifying the code subspace in which $G_{\rm eff}$ variations are logical operators; and (iii)~proving the relevant Knill--Laflamme error bound in that subspace.
+If $G_{\rm eff}$ is instead a background parameter (analogous to~$N$ in the AdS/CFT dictionary, where $G_N \sim 1/N^2$), the QEC decoupling theorem does not apply and the screening mechanism fails entirely; the proposal therefore stands or falls on the resolution of open problem~(ii).
+We include this section as a research direction, not as a claimed result.
+
+
+%% ====================================================================
+\section{The de Sitter Exclusion Theorem}
+%% ====================================================================
+
+\begin{theorem}[de Sitter Exclusion (Conditional)]\label{thm:dS}
+If the dynamics of the cosmological horizon involve a quantum lattice system whose spectral gap is undecidable in the Cubitt--Perez-Garcia--Wolf sense, then the spacetime cannot be asymptotically de~Sitter.
+\end{theorem}
+
+\begin{proof}
+In asymptotically de~Sitter spacetime, $H(t)\to H_\infty > 0$, so the lattice size $L(t)\to L_{\max} = c/(H_\infty\cdot\ell) < \infty$.
+A finite-dimensional Hamiltonian has a computable spectral gap, contradicting the assumed undecidability.
+For the gap question to be genuinely undecidable, $L(t)\to\infty$, which requires $H(t)\to 0$, i.e.\ not asymptotically de~Sitter.
+\end{proof}
+
+\begin{corollary}
+Under the hypotheses of Theorem~\ref{thm:dS}, $w > -1$ at sufficiently late times.
+\end{corollary}
+
+\begin{proof}
+Undecidability requires $L(t) \to \infty$, hence $H(t) \to 0$.
+For $w < -1$ (phantom), $\dot H = -\tfrac{3}{2}(1+w)H^2 > 0$, so $H$ increases and $L \to 0$; undecidability is excluded.
+For $w = -1$ exactly, $H = \mathrm{const}$ and $L$ is finite; also excluded.
+Only $w > -1$ (at sufficiently late times) yields $H \to 0$ and $L \to \infty$, as required.
+\end{proof}
+
+\begin{remark}
+The conditional hypothesis---that the horizon dynamics involve a Cubitt-type system---is non-trivial.
+The Cubitt--Perez-Garcia--Wolf construction requires a translationally invariant 2D lattice with carefully tuned nearest-neighbour interactions encoding a universal Turing machine.
+Cosmological horizons are spherical, and their effective Hamiltonians---if they exist---are not known to possess this specific structure.
+No existing de~Sitter holography proposal (e.g.\ the dS/CFT correspondence of Strominger, which involves a Euclidean boundary CFT rather than a local lattice Hamiltonian) provides a candidate realisation.
+Furthermore, as noted in Section~\ref{sec:hierarchy}, no known holographic boundary theory has an undecidable spectral gap; integrability and supersymmetry protect decidability.
+The theorem is therefore best understood as identifying a \emph{dichotomy}: the late-time fate of the universe may depend on the computational complexity class of quantum gravity.
+\end{remark}
+
+
+%% ====================================================================
+\section{No-Go Theorem~III: QEC Cosmology}
+\label{sec:qec_nogo}
+%% ====================================================================
+
+\subsection{The MDS Code Model}
+
+We model the universe as a holographic QEC code with physical qubits $n = S_{\rm Hubble} = \pi c^5/(\hbar G_N H^2)$, logical qubits $k = C_A(t)$, and rate $R = k/n$.
+The MDS (Maximum Distance Separable) limit represents the most efficient possible error correction: it saturates the Singleton bound $k = n - 2d + 2$, maximising the number of logical qubits for a given code distance.
+While realistic holographic codes (e.g.\ HaPPY pentagon codes, random tensor networks) are not strictly MDS, the MDS limit provides a clean analytic result.
+For a sub-MDS code with rate $R < 1$, the same derivation gives $w = -1 + 1/(3R\pi^2)$: a \emph{larger} deviation from~$-1$, which reduces the $w_0$ tension with DESI but worsens the Hubble tension (since $\rho_{\rm QEC}\propto (1+z)^{1/(R\pi^2)}$ evolves faster at high~$z$).
+The $w_a = 0$ prediction is unchanged for any constant-$R$ code.
+No value of~$R$ simultaneously resolves all three tensions ($w_0$, $w_a$, $H_0$).
+If the code saturates both the Lloyd bound ($\dot k = c^5/(\pi G_N\hbar H)$) and the Singleton bound, equating $\dot k = \dot n$ in the zero-error limit yields:
+\begin{equation}\label{eq:Hdot_QEC}
+\dot H = -\frac{H^2}{2\pi^2}\,.
+\end{equation}
+This gives a constant effective equation of state:
+\begin{equation}\label{eq:wQEC}
+w_{\rm QEC} = -1 + \frac{1}{3\pi^2} \approx -0.966\,.
+\end{equation}
+
+\subsection{Observational Confrontation}
+
+In a two-fluid model (matter + QEC fluid with $\rho_{\rm QEC}\propto (1+z)^{1/\pi^2}$), calibrating to the CMB ($\omega_m = 0.143$, $D_M(z_*=1090)$ matched to $\Lambda$CDM) yields:
+\begin{equation}
+H_0^{\rm QEC} \approx 66.4\;\mathrm{km/s/Mpc}\,,
+\end{equation}
+\emph{worsening} the Hubble tension from $5.4\sigma$ ($\Lambda$CDM) to $6.3\sigma$.\footnote{Hubble tension significances computed using $H_0^{\rm local} = 73.04\pm 1.04\;\mathrm{km/s/Mpc}$ (Riess et al.\ 2022, \emph{ApJ} \textbf{934}, L7) and $H_0^{\rm Planck} = 67.4\;\mathrm{km/s/Mpc}$ for $\Lambda$CDM.}
+Furthermore, $w_{\rm QEC} = -0.966$ with $w_a = 0$ is incompatible with DESI~DR2 ($w_0 = -0.75\pm 0.07$) at $3.1\sigma$, and the zero evolution conflicts with $w_a = -0.99\pm 0.28$ at $3.5\sigma$.
+The conflict is twofold: DESI prefers $w_0$ \emph{less negative} than the QEC prediction (i.e.\ further from~$-1$) and a \emph{strongly evolving} dark energy ($w_a \ll 0$), whereas the QEC model predicts a near-constant equation of state too close to~$-1$.
+
+\subsection{Dynamic Error Rate Is Negligible}
+
+Including time-dependent entropy production $\dot\Sigma(t)$ from SMBH accretion modifies~\eqref{eq:Hdot_QEC} to:
+\begin{equation}
+\dot H = -\frac{H^2}{2\pi^2} - \frac{\hbar G_N H^3}{2\pi c^5}\,\dot\Sigma\,,
+\end{equation}
+where $\dot\Sigma$ is the total dimensionless entropy production rate of the observable universe (units: $\mathrm{s}^{-1}$).
+The dominant source is SMBH accretion.
+With total SMBH entropy $S_{\rm SMBH} \sim 3\times 10^{104}\,k_B$~\cite{EganLineweaver2010} accumulated over $t_0 \approx 4.4\times 10^{17}$~s, the average rate is $\dot\Sigma \sim 10^{87}\;\mathrm{s^{-1}}$.
+The dimensionless ratio of the dynamic to static terms is:
+\begin{equation}
+\frac{\sigma}{1/(2\pi^2)} = \frac{\pi\hbar G_N H_0}{c^5}\,\dot\Sigma \approx 2\times 10^{-104}\times 10^{87} \sim 10^{-17}\,.
+\end{equation}
+The suppression arises because the prefactor $\pi\hbar G_N H_0/c^5 \approx 2\times 10^{-104}\;\mathrm{s}$ converts physical entropy production rates into contributions to the Friedmann equation, while the static QEC term $1/(2\pi^2) \approx 0.05$ is a pure geometric ratio requiring no such conversion.
+Although the suppression is ``only'' 17~orders of magnitude (not the ${\sim}90$ reported in an earlier version of this analysis, which used an incorrect per-volume entropy density), it is more than sufficient to render the dynamic correction physically empty.
+
+\begin{theorem}[QEC Dark Energy Exhaustion]\label{thm:qec}
+Within the QEC cosmology framework (Lloyd + MDS saturation), the effective equation of state is $w = -1+1/(3\pi^2)\approx -0.966$ (constant), independent of the entropy production rate.
+This prediction is incompatible with DESI~DR2 at $>3\sigma$ and worsens the Hubble tension.
+Time-dependent corrections from $\dot\Sigma(t)$ are suppressed by $\sim 17$ orders of magnitude and are physically empty.
+\end{theorem}
+
+%% ====================================================================
+\section{Discussion}
+%% ====================================================================
+
+\subsection{Summary of Results}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Result & Type & Section \\
+\midrule
+Complexity filling fraction $f_C \approx 0.057$ & Derivation & 3 \\
+Holographic Capacity Dichotomy & Observation & 3 \\
+HH/$\Omega$ computability-theoretic separation & Structural & 6 \\
+QEC screening proposal & Heuristic & 7 \\
+de Sitter Exclusion Theorem & Theorem & 8 \\
+Sign problem no-go & Theorem & 4 \\
+Memory integral catastrophe & Theorem & 5 \\
+QEC dark energy exhaustion & Theorem & 9 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Closure of the Complexity--Dark Energy Programme}
+
+Theorems~\ref{thm:sign}--\ref{thm:qec} collectively establish that \textbf{information-theoretic modifications to the entropy-area law cannot source cosmic acceleration within the Jacobson thermodynamic programme or its QEC extension}.
+The sign problem (Theorem~1) rules out monotonic entropy-area modifications.
+The memory integral (Theorem~2) rules out the corrected sign.
+The QEC model (Theorem~3) rules out the MDS code approach with either static or dynamic error rates.
+
+\subsection{What Survives}
+
+The positive results---the complexity filling fraction, the HH/$\Omega$ computability-theoretic separation, the QEC screening mechanism, and the de Sitter Exclusion Theorem---are independent of the Friedmann equation and survive all no-go theorems.
+They provide building blocks for future approaches that circumvent the entropy-area route entirely.
+
+\subsection{The Decidability Loophole and Cosmology as a Complexity Probe}
+
+If the holographic degrees of freedom on the cosmological horizon belong to a decidable complexity class, Theorem~\ref{thm:dS} is bypassed and stable de~Sitter vacua become compatible with the quantum information structure of the horizon.
+This highlights a striking dichotomy: the ultimate late-time fate of the universe may depend on the computational complexity class to which quantum gravity belongs.
+
+Reading the contrapositive of Theorem~\ref{thm:dS} observationally: if future precision cosmology confirms $w = -1.000$ exactly (pure $\Lambda$), then---under the hypothesis that the horizon supports a quantum lattice system---the holographic boundary theory must be computationally \emph{decidable}.
+Cosmological observations would thereby serve as a macroscopic probe of the decidability class of quantum gravity.
+
+This conclusion is structurally distinct from the Swampland programme~\cite{Vafa2005}, which argues against de~Sitter vacua from string landscape considerations (scalar field gradient bounds, tower conjectures).
+The present argument relies instead on the computational complexity of the horizon Hamiltonian: a finite lattice (de~Sitter) is necessarily decidable, whereas undecidable dynamics require the thermodynamic limit ($H\to 0$, $w > -1$).
+The two programmes reach overlapping conclusions from independent premises.
+
+
+%% ====================================================================
+\section*{Acknowledgements}
+%% ====================================================================
+
+The author acknowledges the use of advanced computational linguistic models and symbolic algebra systems (notably SymPy) in the cross-verification of complex algebraic derivations and numerical simulations.
+All theoretical conceptualisation and final analytical proofs remain the sole responsibility of the author.
+A verification suite reproducing every mathematical claim is available at \url{https://github.com/cjlcv6061-svg/adm-verification}.
+
+
+%% ====================================================================
+\appendix
+\section{Numerical Verification of the Memory Integral Catastrophe}
+%% ====================================================================
+
+We integrate the ODE system derived from~\eqref{eq:memory} with redshift $z$ as the independent variable ($H_0=1$):
+\begin{align}
+H^2(z) &= \frac{\Omega_m(1+z)^3 - 2\lambda\,I(z)}{1-\lambda f(z)}\,,\\
+\frac{df}{dz} &= -\frac{\kappa\,\eta(z)}{(1+z)\,H(z)}\,,\qquad
+\frac{dI}{dz} = -\frac{\kappa\,\eta(z)\,H(z)}{(1+z)}\,,
+\end{align}
+with $\Omega_m=0.3$, $\lambda=7$ (chosen to produce $\lambda f \sim O(1)$ at the filling fraction scale, making the memory integral's effect maximally visible; the qualitative conclusion is insensitive to~$\lambda$), Gaussian $\eta(z) = \exp[-(z-1)^2/2]$, and $\kappa = \lambda\Gamma/(H_0\sqrt{\Omega_m})$.
+Initial conditions are $f(z_{\rm init}) = 0$, $I(z_{\rm init}) = 0$ at $z_{\rm init} = 20$.
+Integration was performed using the explicit Runge--Kutta method (RK45) with maximum step size $\Delta z = 0.01$; results are stable under refinement to $\Delta z = 0.001$.
+Table~\ref{tab:recollapse} shows recollapse redshifts.
+
+\begin{table}[h]
+\centering
+\caption{Redshift of recollapse ($H^2\to 0$) vs.\ coupling strength.}
+\label{tab:recollapse}
+\begin{tabular}{ccc}
+\toprule
+$\kappa$ & $z_{\rm recollapse}$ & $f(z_{\rm recollapse})$ \\
+\midrule
+0.5 & 1.45 & 0.085 \\
+1.0 & 1.75 & 0.096 \\
+2.0 & 2.04 & 0.111 \\
+5.0 & 2.40 & 0.114 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+No positive~$\kappa$ yields $H^2(z=0)>0$.
+The memory integral is a dominant, not sub-dominant, correction.
+
+
+%% ====================================================================
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}
