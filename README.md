@@ -1,108 +1,92 @@
-# ADM Paper Verification Suite
+# ADM Verification Repository
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Verification scripts for all mathematical claims in:
 
-**Companion code for:** "Holographic Complexity in Cosmology: Positive Results, No-Go Theorems, and the Memory Integral Obstruction" (Revised April 2026)
+- **Paper A**: *Holographic Complexity in Cosmology: Positive Results, No-Go Theorems,
+  and the Memory Integral Obstruction*
+  Zenodo DOI: [10.5281/zenodo.19242134](https://doi.org/10.5281/zenodo.19242134)
+- **Letter B**: *Complexity-Inspired Quintessence with Holographic Screening: A Null Result*
+- **Paper D**: *Intrinsic Geodesic Bias of the CPL Parameterization on the BAO Fisher Manifold*
 
-This repository contains the complete symbolic and numerical verification of every mathematical claim in the paper. All algebraic identities are verified by [SymPy](https://www.sympy.org/); all numerical results are computed by [NumPy](https://numpy.org/) and [SciPy](https://scipy.org/).
+All scripts are self-contained and require only standard scientific Python:
+`numpy`, `scipy`, `sympy`, `mpmath`.
 
-## Quick Start
+---
+
+## Scripts
+
+| File | Paper | Claims verified |
+|------|-------|----------------|
+| `verify_fc_integral.py` | A §3 | `f_C = 0.05696`; shortcut overestimates by factor 1.7; EdS `1/(3π²)`; `f_C/f_S ~ 10¹⁶` |
+| `verify_fc_ceiling.py` | A §3 Thm 4 | f_C Ceiling Theorem: 12-model scan + pointwise-H failure demo |
+| `verify_wQEC.py` | A §9 Thm 3 | `w_QEC = -0.9662`; Hubble tensions 5.4σ/6.3σ; DESI tensions 3.1σ/3.5σ; `~10⁻¹⁷` suppression |
+| `verify_memory_integral.py` | A §5 Thm 2 | Recollapse redshifts κ = 0.5, 1, 2, 5 (Table 1) |
+| `verify_v4_scaling.py` | Letter B §4 | V₄ = 3π/55·t⁴ (matter); 8π/105·t⁴ (radiation); w_eff = 0; Ω_cs(CMB) ≫ EDE bound |
+| `verify_BBN_alpha_bound.py` | Letter B §2 | Complete JT ODE integration; BBN nonlinear bound; α < 2.33 (exact IC) and α < 6.93 (shortcut IC) |
+
+---
+
+## Key derivations
+
+### Eq. (3) of Paper A — denominator clarification
+
+The z-integral form of f_C has denominator
+`[Ω_m(1+z)³ + Ω_Λ] = H(z)²/H₀²`
+(the **square** of the dimensionless Hubble rate, not the square root).
+This arises because the variable change `dt = −dz/[(1+z)H(z)]` introduces
+one factor of H while the integrand `1/H` contributes the other.
+Confirmed numerically: gives `f_C = 0.0570`.
+
+### BBN α bound for Letter B §2 — full derivation
+
+**Formula** (exact nonlinear):
+```
+|(1 + α·Ψ_today)/(1 + α·Ψ_BBN) − 1| < 0.05
+```
+where `G_eff(z) = G_N/(1 + α·Ψ(z))`.
+
+Ψ is frozen by Hubble friction at high z, so `Ψ_BBN ≈ Ψ_init`.
+
+Two EdS initial conditions:
+
+| Scenario | Ψ_BBN | Ψ_today | α_max | Letter B |
+|----------|-------|---------|-------|----------|
+| A: exact EdS f_C = 1/(3π²) | 0.034 | Ψ_* (full relax) | **2.33** | ~2 ✓ |
+| B: shortcut (2/3)/π² | 0.068 | Ψ_* (full relax) | **6.93** | ~7 ✓ |
+
+Scenario B is looser because larger Ψ_BBN → smaller ΔG_eff → more room for α.
+
+**Key**: w₀ ≈ −1 regardless of α. The bound only constrains the gravitational coupling,
+not the equation of state prediction.
+
+### f_C Ceiling Theorem (Paper A §3, Theorem 4)
+
+For any dark energy model with w(z) > −1, `f_C < f_C(ΛCDM)`.
+Verified for 12 representative models. Note: pointwise H(z) > H_ΛCDM(z) fails at z > 0.7
+for the DESI best-fit, so the theorem requires an **integral** argument, not a pointwise bound.
+
+---
+
+## Running all scripts
 
 ```bash
-git clone https://github.com/cjlcv6061-svg/adm-verification.git
-cd adm-verification
-pip install -r requirements.txt
-python adm_verification.py
+python verify_fc_integral.py
+python verify_fc_ceiling.py
+python verify_wQEC.py
+python verify_memory_integral.py
+python verify_v4_scaling.py
+python verify_BBN_alpha_bound.py
 ```
 
-Expected output:
-```
-OVERALL: ALL VERIFICATIONS PASSED ✓
-```
+Each script prints verified quantities and exits with a non-zero code if any assertion fails.
 
-## What is Verified
+---
 
-| Paper Section | Claim | Verification Method | 
-|---|---|---|
-| §3 | $f_C = t_0 H_0/\pi^2 \approx 0.100$ | SymPy symbolic simplification |
-| §3 | $\dot{f} = 0$ in Einstein–de Sitter | SymPy substitution |
-| §3 | $\dot{f}/H \approx 0.057$ in ΛCDM | SymPy + numerical evaluation |
-| §3.3 | $f_C/f_S \sim 10^{16}$ (Capacity Dichotomy) | Numerical evaluation |
-| §3.3 | $f_C \approx 0.057$ from exact ΛCDM integral | SciPy numerical integration |
-| §4 | $\rho_{\rm DE} < 0$ for $S = (A/4G)(1+\lambda f)$ | SymPy factorisation |
-| §4 | $\Omega_{\rm DE} \approx -0.128$, $H_0 \approx 29$ km/s/Mpc | Numerical evaluation |
-| §5 | Product rule: $d/dt[(1-\lambda f)H^2]$ has $-\lambda\dot{f}H^2$ | SymPy `diff` + `expand` |
-| §5 | Raychaudhuri RHS has $+\lambda\dot{f}H^2$ | SymPy verification |
-| §5 | Residual = $+2\lambda\dot{f}H^2 \neq 0$ | SymPy `simplify` |
-| §5 | $[I] = T^{-2} = [H^2]$ (dimensional consistency) | Analytical |
-| §5 | Recollapse at $z \approx 1.75$ for $\kappa = 1$ | SciPy ODE integration |
-| §5 | No positive $\kappa$ yields $H(0) = H_0$ | Exhaustive numerical scan |
-| §5.5 | $f$ depends on both $A$ and $t$ (not $S(A)$) | SymPy partial derivatives |
-| §6 | $f_C(\text{EdS}) = 1/(3\pi^2) \approx 0.034$ | Numerical evaluation |
-| §8 | $H = H_\infty$ in de Sitter | SymPy symbolic differentiation |
-| §8 | Conformal time $\eta_\infty = 1/H_\infty$ is finite | SymPy definite integral |
-| §8 | $L_{\max} \approx 8.2 \times 10^{60}$ | Numerical evaluation |
-| §9 | $w_{\rm QEC} = -1 + 1/(3\pi^2) \approx -0.966$ | Numerical evaluation |
-| §9 | $H_0^{\rm QEC} \approx 66.4$ km/s/Mpc (6.3$\sigma$ tension) | CMB calibration |
-| §9 | Dynamic/static suppression ratio $\sim 10^{-17}$ | Numerical evaluation |
-| Supp. | $\rho_{\rm DE} > 0$ for $S = (A/4G)(1-\lambda f)$ | SymPy sign analysis |
-| Supp. | $H_0 \approx 70$ km/s/Mpc with corrected sign | Numerical evaluation |
+## Changelog
 
-## Running Individual Sections
+| Version | Date | Changes |
+|---------|------|---------|
+| v1 | 2026-03 | Initial release with Paper A v1 |
+| v2 | 2026-04 | Added: f_C Ceiling Theorem (Thm 4), arithmetical hierarchy, V₄ scaling (Letter B), Eq.(3) denominator note, BBN α bound full derivation; removed Paper C dependency |
 
-```bash
-python adm_verification.py --section 3    # Complexity filling fraction
-python adm_verification.py --section 3.3  # Holographic Capacity Dichotomy
-python adm_verification.py --section 4    # No-Go Theorem I
-python adm_verification.py --section 5    # Memory Integral Catastrophe
-python adm_verification.py --section 5.5  # Distinction from Barrow/Tsallis
-python adm_verification.py --section 6    # Class C/U Partition
-python adm_verification.py --section 8    # de Sitter Exclusion Theorem
-python adm_verification.py --section 9    # QEC No-Go Theorem (Theorem 3)
-python adm_verification.py --section S    # Corrected sign verification
-```
-
-## Requirements
-
-```
-sympy>=1.12
-numpy>=1.24
-scipy>=1.11
-```
-
-## Repository Structure
-
-```
-adm-verification/
-├── README.md                              # This file
-├── requirements.txt                       # Python dependencies
-├── adm_verification.py                    # Complete verification suite
-├── paper/
-│   ├── ADM_paper_v4.tex                   # v1 LaTeX source (preserved)
-│   ├── ADM_paper_v4.pdf                   # v1 compiled PDF (preserved)
-│   ├── Holographic_Complexity_v3.tex      # v3 LaTeX source (current)
-│   ├── references.bib                     # BibTeX database (new)
-│   └── Holographic_Complexity_v3.pdf      # v3 compiled PDF (new)
-└── LICENSE                                # MIT License
-```
-
-## Citation
-
-If you use this verification suite, please cite:
-
-```bibtex
-@article{Cheng2026,
-  title   = {Holographic Complexity in Cosmology: Positive Results, 
-             No-Go Theorems, and the Memory Integral Obstruction},
-  author  = {Cheng, John Shun Leong},
-  journal = {Foundations of Physics},
-  year    = {2026},
-  doi     = {10.5281/zenodo.19242134},
-  note    = {Verification code: https://github.com/cjlcv6061-svg/adm-verification}
-}
-```
-
-## License
-
-MIT License. See [LICENSE](LICENSE) for details.
+| `verify_paper_d.py` | Paper D | Christoffel $>0$; $d_{FR}/T_{1D}\approx 2$; $h(z)$ threshold $\Omega_m=1/9$ (exact); Jeffreys scaling $\propto 1/\lambda$ |
